@@ -85,7 +85,8 @@ class TestSession:
         })
 
     def submit(self):
-        """Stamp the submission time using Python's datetime module."""
+         """Stamp the submission time using Python's built-in datetime module (Standard API requirement)."""
+
         self.submitted_at = datetime.now()
 
     def get_percentage(self):
