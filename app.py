@@ -14,8 +14,9 @@ app.secret_key = "cbt_engine_secret_2026"  # Required for Flask session cookies
 
 
 # ============================================================
-# QUESTION BANK — 10 hardcoded multiple-choice questions
-# ============================================================
+   # QUESTION BANK — 10 hardcoded multiple-choice questions
+   # Topics: HTML, Python, OOP, Data Structures, General Knowledge
+   # ============================================================
 QUESTIONS = [
     Question("What does HTML stand for?",
              ["HyperText Markup Language", "HighText Machine Language",
