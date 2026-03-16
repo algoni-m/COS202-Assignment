@@ -200,4 +200,5 @@ def _save_session(ts, next_q_index):
 # RUN
 # ============================================================
 if __name__ == "__main__":
-    app.run(debug=True)
+     # debug=True enables auto-reload during development
+   app.run(debug=True)
