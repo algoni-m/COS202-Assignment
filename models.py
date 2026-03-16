@@ -64,7 +64,8 @@ class TestSession:
         # .append() pushes onto the stack; we can .pop() to undo the last
         # answer if we ever add an "undo" feature. This satisfies the
         # assignment's Stack (LIFO) requirement.
-        self._answer_stack = []
+      self._answer_stack = []  # Stack (LIFO) — satisfies Data Structures requirement
+
 
     def record_answer(self, question, chosen_index):
         """
