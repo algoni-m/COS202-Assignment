@@ -44,8 +44,8 @@ class TestSession:
     Behavior: record answers, compute grade, build result summary
     """
 
-    # --- Grade thresholds ---
-    GRADE_MAP = [
+   # Grade thresholds — maps percentage score to a label and emoji
+   GRADE_MAP = [
         (90, "Outstanding",  "🏆"),
         (75, "Excellent",    "🎉"),
         (60, "Good Pass",    "👍"),
