@@ -10,7 +10,7 @@ from models import Question, TestSession
 app = Flask(__name__)
 
 # Secret key required for Flask's client-side session (cookie)
-app.secret_key = "cbt_engine_secret_2026"
+app.secret_key = "cbt_engine_secret_2026"  # Required for Flask session cookies
 
 
 # ============================================================
