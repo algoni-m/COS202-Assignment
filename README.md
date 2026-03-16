@@ -130,4 +130,5 @@ The app will load. Enter your name and start the test!
 
 ---
 
-*Built by Baffah Laiden — MAAUN, COS 202*
+*Built by Algoni Mohammed — MAAUN, COS 202 — Assignment 4*
+   *Due Date: 20th March 2026*
