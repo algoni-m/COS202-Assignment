@@ -4,7 +4,16 @@ A Flask-powered Computer-Based Test (CBT) application built for **COS 202 — As
 Students enter their name, answer 10 multiple-choice questions, and receive a timestamped result page with a full answer breakdown.
 
 ---
+## Features
 
+   - Student enters their name before starting the test
+   - 10 multiple-choice questions displayed one at a time
+   - Live progress bar shows how far along the test you are
+   - Countdown timer tracks how long the test is taking
+   - Score is tracked automatically in the background
+   - Results page shows score, percentage, grade, and timestamp
+   - Full answer review shows correct vs wrong answers
+   - Restart button to retake the test anytime
 ## What the App Does
 
 - Welcomes the student and collects their name
