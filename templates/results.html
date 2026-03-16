@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+{% block title %}CBT Engine — Results{% endblock %}
+
+{% block content %}
+<style>
+  /* ============================================================
+     RESULTS-SPECIFIC STYLES
+  ============================================================ */
+  .result-top {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  .result-emoji {
+    font-size: 3.5rem;
+    margin-bottom: 14px;
+    display: block;
+    animation: popIn 0.5s cubic-bezier(0.2,0.8,0.3,1.2) both;
+  }
+
+  @keyframes popIn {
+    from { transform: scale(0); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+
+  .result-grade {
+    font-family: var(--font-head);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  .result-name { color: var(--muted); font-size: 0.95rem; }
+
+  .score-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 28px 0;
+  }
+
+  .score-big {
+    font-family: var(--font-head);
+    font-size: clamp(3.5rem, 12vw, 5rem);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--text);
+  }
+
+  .score-denom {
+    font-family: var(--font-head);
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    color: var(--muted);
+    align-self: flex-end;
+    margin-bottom: 8px;
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+
+  .stat-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 10px;
+    text-align: center;
+  }
+
+  .stat-val {
+    font-family: var(--font-head);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text);
+    display: block;
+  }
+
+  .stat-lbl {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--muted);
+    margin-top: 4px;
+    display: block;
+  }
+
+  .timestamp {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 28px;
+  }
+
+  .review-title {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .review-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+
+  .review-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+
+  .r-correct { background: rgba(46,204,113,0.08); border: 1px solid rgba(46,204,113,0.25); }
+  .r-wrong   { background: rgba(231,76,60,0.08);  border: 1px solid rgba(231,76,60,0.25);  }
+
+  .review-dot {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .r-correct .review-dot { background: var(--correct); color: #fff; }
+  .r-wrong   .review-dot { background: var(--wrong);   color: #fff; }
+
+  .review-q   { color: var(--muted); display: block; margin-bottom: 3px; }
+  .review-ans { color: var(--text); }
+  .review-ans strong { font-weight: 600; }
+
+  .result-footer {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .result-footer .btn { flex: 1; min-width: 140px; }
+</style>
+
+<div class="card">
+
+  <!-- Top: emoji + grade + name -->
+  <div class="result-top">
+    <span class="result-emoji">{{ result.emoji }}</span>
+    <div class="result-grade">{{ result.grade }}</div>
+    <div class="result-name">Well done, {{ result.student_name }}</div>
+  </div>
+
+  <!-- Big score -->
+  <div class="score-display">
+    <span class="score-big">{{ result.score }}</span>
+    <span class="score-denom">&thinsp;/ {{ result.total }}</span>
+  </div>
+
+  <!-- Stat boxes -->
+  <div class="stats-row">
+    <div class="stat-box">
+      <span class="stat-val">{{ result.percentage }}%</span>
+      <span class="stat-lbl">Percentage</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-val">{{ result.score }}</span>
+      <span class="stat-lbl">Correct</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-val">{{ result.total - result.score }}</span>
+      <span class="stat-lbl">Wrong</span>
+    </div>
+  </div>
+
+  <!-- Auto-generated timestamp (from Python datetime module) -->
+  <div class="timestamp">
+    📅 &nbsp;Submitted: {{ result.timestamp }}
+  </div>
+
+  <!-- Answer review -->
+  <p class="review-title">Answer Review</p>
+  <div class="review-list">
+    {% for a in result.answers %}
+    <div class="review-item {{ 'r-correct' if a.is_correct else 'r-wrong' }}">
+      <div class="review-dot">{{ '✓' if a.is_correct else '✗' }}</div>
+      <div>
+        <span class="review-q">Q{{ loop.index }}: {{ a.question }}</span>
+        <span class="review-ans">
+          {% if a.is_correct %}
+            Your answer: <strong>{{ a.chosen }}</strong>
+          {% else %}
+            Your answer: <strong>{{ a.chosen }}</strong>
+            &mdash; Correct: <strong>{{ a.correct_ans }}</strong>
+          {% endif %}
+        </span>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Action buttons -->
+  <div class="result-footer">
+    <a href="/restart" class="btn btn-ghost">↺ Restart</a>
+    <button onclick="window.print()" class="btn btn-primary">🖨 Print Results</button>
+  </div>
+
+</div>
+{% endblock %}

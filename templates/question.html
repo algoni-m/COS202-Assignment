@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+{% block title %}CBT Engine — Question {{ q_number }}{% endblock %}
+
+{% block content %}
+<style>
+  /* ============================================================
+     QUIZ-SPECIFIC STYLES
+  ============================================================ */
+  .quiz-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+
+  .q-counter {
+    font-size: 0.82rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .q-counter strong { color: var(--accent); }
+
+  .timer-badge {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.05em;
+    transition: color 0.3s;
+  }
+  .timer-badge.urgent { color: var(--wrong); border-color: var(--wrong); }
+
+  .progress-track {
+    height: 4px;
+    background: var(--border);
+    border-radius: 4px;
+    margin-bottom: 32px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 4px;
+    width: {{ progress }}%;
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  /* Each option is a radio label styled as a card */
+  .option-label {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 18px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    color: var(--text);
+    font-size: 0.95rem;
+  }
+  .option-label:hover { border-color: var(--accent); background: rgba(245,200,66,0.05); transform: translateX(4px); }
+
+  .opt-letter {
+    width: 30px; height: 30px;
+    border-radius: 7px;
+    background: var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+    color: var(--muted);
+    transition: background 0.2s, color 0.2s;
+  }
+
+  /* Hide the real radio button */
+  input[type="radio"] { display: none; }
+
+  /* Highlight selected option */
+  input[type="radio"]:checked + .option-label {
+    border-color: var(--accent);
+    background: rgba(245,200,66,0.08);
+  }
+  input[type="radio"]:checked + .option-label .opt-letter {
+    background: var(--accent);
+    color: #0d0f14;
+  }
+
+  .quiz-footer { display: flex; justify-content: flex-end; }
+  .quiz-footer .btn { min-width: 160px; width: auto; }
+</style>
+
+<div class="card">
+
+  <!-- Header: counter + timer -->
+  <div class="quiz-header">
+    <span class="q-counter">
+      Question <strong>{{ q_number }}</strong> of <strong>{{ total }}</strong>
+    </span>
+    <div class="timer-badge" id="timer-display">00:00</div>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="progress-track">
+    <div class="progress-fill"></div>
+  </div>
+
+  <!-- Question + options form -->
+  <form action="/submit" method="POST" id="quiz-form">
+
+    <h2>{{ question.text }}</h2>
+
+    <div class="options">
+      {% for option in question.options %}
+      <div>
+        <input
+          type="radio"
+          name="chosen_index"
+          id="opt_{{ loop.index0 }}"
+          value="{{ loop.index0 }}"
+          required
+        />
+        <label class="option-label" for="opt_{{ loop.index0 }}">
+          <div class="opt-letter">{{ letters[loop.index0] }}</div>
+          <span>{{ option }}</span>
+        </label>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Next / Finish button -->
+    <div class="quiz-footer">
+      <button type="submit" class="btn btn-primary">
+        {% if q_number == total %}Finish ✓{% else %}Next &nbsp;→{% endif %}
+      </button>
+    </div>
+
+  </form>
+</div>
+
+<!-- ============================================================
+     TIMER SCRIPT — counts up from 0:00
+============================================================ -->
+<script>
+  let seconds = 0;
+
+  function tick() {
+    seconds++;
+    const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+    const s = String(seconds % 60).padStart(2, '0');
+    const el = document.getElementById('timer-display');
+    el.textContent = `${m}:${s}`;
+    el.classList.toggle('urgent', seconds > 300);
+  }
+
+  setInterval(tick, 1000);
+</script>
+{% endblock %}

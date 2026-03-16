@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}CBT Engine — Welcome{% endblock %}
+
+{% block content %}
+<div class="card">
+
+  <!-- Brand -->
+  <div class="brand">
+    <div class="brand-icon">📋</div>
+    <span class="brand-name">CBT Engine</span>
+  </div>
+
+  <h1>Ready to Test Your Knowledge?</h1>
+  <p class="subtitle">
+    Answer 10 multiple-choice questions. Your score, percentage, and a
+    full breakdown will appear on the results page.
+  </p>
+
+  <!-- Meta chips -->
+  <div class="meta-row">
+    <div class="chip">🕐 <span>~5 mins</span></div>
+    <div class="chip">❓ <span>10 questions</span></div>
+    <div class="chip">⚡ <span>Instant results</span></div>
+  </div>
+
+  <!-- Error message (shown if name was empty) -->
+  {% if error %}
+    <p class="err-msg">{{ error }}</p>
+  {% endif %}
+
+  <!-- Name form — POST to /start -->
+  <form action="/start" method="POST">
+    <label for="student_name">Your Full Name</label>
+    <input
+      type="text"
+      id="student_name"
+      name="student_name"
+      placeholder="e.g. Baffah Laiden"
+      maxlength="60"
+      autocomplete="off"
+      required
+    />
+    <br>
+    <button type="submit" class="btn btn-primary">Begin Test &nbsp;→</button>
+  </form>
+
+</div>
+{% endblock %}
