@@ -116,7 +116,7 @@ The app will load. Enter your name and start the test!
 | `/submit`   | POST   | Records answer, moves to next      |
 | `/results`  | GET    | Shows final results + timestamp    |
 | `/restart`  | GET    | Clears session, returns to home    |
-
+> All routes are defined in app.py using Flask's @app.route decorator.
 ---
 
 ## Assignment Requirements Checklist
