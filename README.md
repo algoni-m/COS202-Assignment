@@ -138,7 +138,17 @@ The app will load. Enter your name and start the test!
 | `/restart`  | GET    | Clears session, returns to home    |
 > All routes are defined in app.py using Flask's @app.route decorator.
 ---
+## Why Flask?
 
+   Flask is a lightweight Python web framework that is perfect
+   for small projects like this one. It lets us write our logic
+   in Python (using classes and data structures) and connect it
+   to a web interface using routes and HTML templates.
+
+   Unlike a full framework like Django, Flask gives us only what
+   we need — making it easier to understand what every line of
+   code does. This makes it ideal for learning how the web works.
+   
 ## Assignment Requirements Checklist
 
 - [x] **OOP** — `Question` class with `is_correct()`, `get_correct_text()`, `to_dict()` methods. `TestSession` class with `record_answer()`, `submit()`, `get_grade()`, `to_result_dict()` methods.
